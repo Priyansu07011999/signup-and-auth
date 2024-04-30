@@ -24,11 +24,11 @@ const AuthForm = () => {
     if (isLogin) {
       // Login URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[myAPIkEY]';
     } else {
       // Sign up URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[MYAPIkEY]';
     }
 
     fetch(url, {
@@ -46,8 +46,7 @@ const AuthForm = () => {
         setIsLoading(false);
         if (response.ok) {
           setFeedbackMessage('Authentication successful!');
-          emailInputRef.current.value = ''
-          passwordInputRef.current.value =''
+          alert('Authentication successful!')
           // You can redirect the user to another page here if needed
         } else {
           return response.json().then((data) => {
@@ -58,13 +57,17 @@ const AuthForm = () => {
             throw new Error(errorMessage);
           });
         }
+        return response.json()
+      })
+      .then(data => {
+        console.log(data.idToken);
+        setFeedbackMessage('Authentication successful')
+        emailInputRef.current.value = ''
+        passwordInputRef.current.value = ''
       })
       .catch((error) => {
-        setFeedbackMessage(error.message);
         alert(error.message)
       });
-
-     
   };
 
   return (
