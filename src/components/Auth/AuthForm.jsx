@@ -1,10 +1,13 @@
-import { useState, useRef } from 'react';
-
+import { useState, useRef, useContext } from 'react';
+import AuthContext from '../../store/AuthContext';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  
+  const athctx = useContext(AuthContext)
+
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
@@ -24,11 +27,11 @@ const AuthForm = () => {
     if (isLogin) {
       // Login URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[myAPIkEY]';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
     } else {
       // Sign up URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[MYAPIkEY]';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
     }
 
     fetch(url, {
@@ -60,10 +63,11 @@ const AuthForm = () => {
         return response.json()
       })
       .then(data => {
-        console.log(data.idToken);
-        setFeedbackMessage('Authentication successful')
-        emailInputRef.current.value = ''
-        passwordInputRef.current.value = ''
+        athctx.login(data.idToken)
+        // console.log(data.idToken);
+        // setFeedbackMessage('Authentication successful')
+        // emailInputRef.current.value = ''
+        // passwordInputRef.current.value = ''
       })
       .catch((error) => {
         alert(error.message)
