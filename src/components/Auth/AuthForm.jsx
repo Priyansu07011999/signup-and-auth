@@ -1,12 +1,14 @@
 import { useState, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import AuthContext from '../../store/AuthContext';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const history = useHistory()
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   
-  const athctx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +16,7 @@ const AuthForm = () => {
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
+    setFeedbackMessage('');
   };
 
   const submitHandler = (event) => {
@@ -48,9 +51,7 @@ const AuthForm = () => {
       .then((response) => {
         setIsLoading(false);
         if (response.ok) {
-          setFeedbackMessage('Authentication successful!');
-          alert('Authentication successful!')
-          // You can redirect the user to another page here if needed
+          return response.json();
         } else {
           return response.json().then((data) => {
             let errorMessage = 'Authentication failed!';
@@ -60,17 +61,16 @@ const AuthForm = () => {
             throw new Error(errorMessage);
           });
         }
-        return response.json()
       })
       .then(data => {
-        athctx.login(data.idToken)
-        // console.log(data.idToken);
-        // setFeedbackMessage('Authentication successful')
-        // emailInputRef.current.value = ''
-        // passwordInputRef.current.value = ''
+        authCtx.login(data.idToken);
+        history.replace('/')
+        setFeedbackMessage('Authentication successful!');
+        emailInputRef.current.value = '';
+        passwordInputRef.current.value = '';
       })
       .catch((error) => {
-        alert(error.message)
+        setFeedbackMessage(error.message);
       });
   };
 
