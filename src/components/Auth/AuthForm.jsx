@@ -30,11 +30,11 @@ const AuthForm = () => {
     if (isLogin) {
       // Login URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[firebaseApi]';
     } else {
       // Sign up URL
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtdmfJq5vu4R3Hb4pMw-jcjhfkFv1jVWE';
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[firebase_api]';
     }
 
     fetch(url, {
